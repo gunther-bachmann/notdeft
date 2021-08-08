@@ -1023,6 +1023,12 @@ undefined components."
 	(while (and (< (point) end) (not (and title summary)))
 	  ;;(message "%S" (list (point) title summary))
 	  (cond
+           ((looking-at "^\\(?:%\\|@;\\|<!--\\)?[[:blank:]]*\\:\\(PROPERTIES\\|END\\|ID\\|ROAM_ALIASES\\)\\:\\(.*\\)$") ;; properties of org roam v2
+            (setq dbg (cons `(PROPS . ,(match-string 2)) dbg))
+            (goto-char (match-end 0)))
+           ((looking-at "^\\(?:%\\|@;\\|<!--\\)?[[:blank:]]*#\\+\\(begin\\|end\\)_src\\(.*\\)$") ;; Org babel header/footer
+            (setq dbg (cons `(BABEL . ,(match-string 2)) dbg))
+            (goto-char (match-end 0)))
 	   ((looking-at "^\\(?:%\\|@;\\|<!--\\)?#\\+TITLE:[[:blank:]]*\\(.*\\)$") ;; Org title
 	    (setq dbg (cons `(TITLE . ,(match-string 1)) dbg))
 	    (setq title (match-string 1))
