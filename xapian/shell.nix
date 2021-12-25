@@ -6,4 +6,7 @@ pkgs.mkShell {
     pkgs.tclap
     pkgs.xapian
   ];
+  shellHook=''
+    export PKG_CONFIG_PATH=${pkgs.tclap}/lib/pkgconfig
+  '';
 }
