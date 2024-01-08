@@ -1192,7 +1192,7 @@ Keep any information for a non-existing file."
 (defun notdeft-buffer-setup ()
   "Render the NotDeft file browser in the current buffer."
   (let ((line (max 3 (line-number-at-pos))))
-    (setq notdeft-buffer-width (window-width))
+    (setq notdeft-buffer-width (1- (window-width)))
     (let ((inhibit-read-only t))
       (erase-buffer))
     (remove-overlays)
@@ -1506,7 +1506,7 @@ Called with the change event concerning the `selected-window',
 whose current buffer should be a NotDeft buffer, as the hook
 is installed locally for NotDeft buffers only."
   (notdeft-assert-major-mode)
-  (unless (equal notdeft-buffer-width (window-width))
+  (unless (equal notdeft-buffer-width (1- (window-width)))
     (unless notdeft-pending-updates
       (notdeft-set-pending-updates 'redraw)))
   (notdeft-do-pending))
@@ -2572,6 +2572,7 @@ hook `notdeft-mode-hook'.
   (make-local-variable 'notdeft-previous-target)
   (add-hook 'window-configuration-change-hook ;; buffer locally
 	    #'notdeft-changed--window nil t)
+  (notdeft-changed--window)
   (run-mode-hooks 'notdeft-mode-hook))
 
 (put 'notdeft-mode 'mode-class 'special)
